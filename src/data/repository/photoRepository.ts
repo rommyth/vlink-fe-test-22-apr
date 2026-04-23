@@ -7,13 +7,15 @@ export const getPhotosByAlbumId = async (
   payload: GetPhotosByAlbumIdSchema,
 ): Promise<Photo[]> => {
   try {
-    const response = await httpClient.get(Api.getAllPhotos(), {
-      params: {
-        userId: payload.id,
-        page: payload?.page,
-        limit: payload?.limit,
+    const response = await httpClient.get(
+      Api.getAllPhotosByAlbumId(payload.id),
+      {
+        params: {
+          _page: payload?.page,
+          _limit: payload?.limit,
+        },
       },
-    });
+    );
 
     const mappedResponse: Photo[] = response.data.map((item: any) =>
       mapToPhotoModel(item),

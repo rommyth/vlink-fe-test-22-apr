@@ -3,7 +3,6 @@ export interface Photo {
   albumId: number;
   title: string;
   url: string;
-  thumbnailUrl: string;
 }
 
 export const mapToPhotoModel = (item: any) => {
@@ -11,7 +10,7 @@ export const mapToPhotoModel = (item: any) => {
     id: item?.id,
     albumId: item?.albumId,
     title: item?.title,
-    url: item?.url,
-    thumbnailUrl: item?.thumbnailUrl,
+    // replace photo karna gambar dari jsonplacheholder mati websitenya
+    url: `https://picsum.photos/${item.id}`,
   };
 };

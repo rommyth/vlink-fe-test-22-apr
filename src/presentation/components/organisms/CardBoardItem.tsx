@@ -34,7 +34,7 @@ const CardBoardItem = ({ Icon, title, body }: CardBoardItemProps) => {
         </Text>
       </View>
 
-      <Text style={tw`font-semibold text-black dark:text-white text-lg`}>
+      <Text style={tw`font-semibold text-black dark:text-white text-lg z-4`}>
         {body}
       </Text>
     </View>

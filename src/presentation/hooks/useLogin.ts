@@ -24,6 +24,7 @@ export default function useLogin() {
   const [token, setToken] = useMMKVString(STORAGE_KEY.TOKEN);
   const [account, setAccount] = useMMKVObject<Account>(STORAGE_KEY.ACCOUNT);
 
+  // Form State
   const {
     control,
     handleSubmit,
@@ -51,7 +52,7 @@ export default function useLogin() {
     },
   });
 
-  // Submi Login Email
+  // Submit Login Email
   const handleLogin = handleSubmit(data => {
     if (data.email != tempEmail || data.password != tempPassword) {
       Toast.show({ type: 'error', text1: 'Invalid email or password' });

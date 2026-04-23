@@ -4,6 +4,8 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import useHome from '../hooks/useHome';
@@ -13,9 +15,17 @@ import { BackgroundGradient, Logo } from '../components/molecules';
 import { EnvelopeIcon } from 'react-native-heroicons/solid';
 import { Spacer } from '../components/atoms';
 import { CardBoardItem, CardUserItem } from '../components/organisms';
+import ListEmptyComponent from '../components/organisms/ListEmptyComponent';
 
 const Home = () => {
-  const { account, navigateToDetailUser } = useHome();
+  const {
+    account,
+    listUsers,
+    isLoadingListUsers,
+    isRefetchingListUsers,
+    refetchListUsers,
+    navigateToDetailUser,
+  } = useHome();
 
   const _renderNavbar = () => {
     return (
@@ -45,25 +55,44 @@ const Home = () => {
       <View
         style={tw`bg-primary--solid dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded-t-[39px] p-4 flex-1`}
       >
-        <FlatList
-          style={tw`flex-1 rounded-3xl`}
-          data={[...Array(20)].fill('*')}
-          keyExtractor={(item, index) => `${item}-${index}`}
-          ItemSeparatorComponent={() => <Spacer height={5} />}
-          showsVerticalScrollIndicator={false}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          renderItem={({ item, index }) => {
-            return (
-              <CardUserItem
-                key={index.toString()}
-                user={item}
-                index={index}
-                onPress={() => navigateToDetailUser()}
+        {isLoadingListUsers ? (
+          <View style={tw`mt-8`}>
+            <ActivityIndicator color={tw.color('white')} size={50} />
+          </View>
+        ) : (
+          <FlatList
+            style={tw`flex-1 rounded-3xl`}
+            data={listUsers}
+            keyExtractor={(item, index) => `${item}-${index}`}
+            ItemSeparatorComponent={() => <Spacer height={5} />}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <ListEmptyComponent
+                height={200}
+                iconSize={100}
+                message="No user data list exists"
               />
-            );
-          }}
-        />
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingListUsers}
+                onRefresh={refetchListUsers}
+              />
+            }
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            renderItem={({ item, index }) => {
+              return (
+                <CardUserItem
+                  key={index.toString()}
+                  user={item}
+                  index={index}
+                  onPress={() => navigateToDetailUser(item)}
+                />
+              );
+            }}
+          />
+        )}
       </View>
     );
   };

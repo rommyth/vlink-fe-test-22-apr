@@ -4,6 +4,7 @@ export interface User {
   email: string;
   phone: string;
   website: string;
+  username: string;
   address: UserAddress;
 }
 
@@ -21,11 +22,12 @@ export const mapToUserModel = (item: any): User => {
     email: item?.email,
     phone: item?.phone,
     website: item?.website,
+    username: item?.username,
     address: {
-      street: item?.street,
-      suite: item?.suite,
-      city: item?.city,
-      zipcode: item?.zipcode,
+      street: item?.address.street,
+      suite: item?.address.suite,
+      city: item?.address.city,
+      zipcode: item?.address.zipcode,
     },
   };
 };

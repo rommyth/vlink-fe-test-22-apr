@@ -7,13 +7,15 @@ export const getAlbumByUserId = async (
   payload: GetAlbumByUserIdSchema,
 ): Promise<Album[]> => {
   try {
-    const response = await httpClient.get(Api.getAllAlbums(), {
-      params: {
-        userId: payload.id,
-        page: payload?.page,
-        limit: payload?.limit,
+    const response = await httpClient.get(
+      Api.getAllAlbumsByUserId(payload.id),
+      {
+        params: {
+          page: payload?.page,
+          limit: payload?.limit,
+        },
       },
-    });
+    );
 
     const mappedResponse: Album[] = response.data.map((item: any) =>
       mapToAlbumModel(item),
