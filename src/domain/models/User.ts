@@ -13,3 +13,19 @@ interface UserAddress {
   city: string;
   zipcode: string;
 }
+
+export const mapToUserModel = (item: any): User => {
+  return {
+    id: item?.id,
+    name: item?.name,
+    email: item?.email,
+    phone: item?.phone,
+    website: item?.website,
+    address: {
+      street: item?.street,
+      suite: item?.suite,
+      city: item?.city,
+      zipcode: item?.zipcode,
+    },
+  };
+};

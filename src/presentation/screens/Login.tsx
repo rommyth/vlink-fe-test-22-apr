@@ -11,9 +11,17 @@ import {
 import { Spacer } from '../components/atoms';
 import ButtonSocialMedia from '../components/molecules/ButtonSocialMedia';
 import useLogin from '../hooks/useLogin';
+import { Controller } from 'react-hook-form';
 
 const Login = () => {
-  const { handleSignInGoogle, navigateToHome } = useLogin();
+  const {
+    control,
+    errors,
+    isLoginPending,
+    handleLogin,
+    handleSignInGoogle,
+    navigateToHome,
+  } = useLogin();
 
   const _renderLogo = () => {
     return (
@@ -42,16 +50,58 @@ const Login = () => {
   const _renderForm = () => {
     return (
       <View style={tw`mt-16 gap-y-6`}>
-        <TextInputPrimary
-          label="Email Address"
-          onChangeText={text => console.log(text)}
+        <Controller
+          control={control}
+          name="email"
+          rules={{
+            required: true,
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Invalid email format',
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInputPrimary
+              label="Email Address"
+              value={value}
+              onChangeText={onChange}
+              errorMessage={errors.email?.message}
+            />
+          )}
         />
-        <TextInputPrimary label="Password" secureEntry={true} />
+
+        <Controller
+          control={control}
+          name="password"
+          rules={{
+            required: true,
+            minLength: {
+              value: 6,
+              message: 'Password at least 6 character',
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInputPrimary
+              label="Password"
+              value={value}
+              onChangeText={onChange}
+              errorMessage={errors.password?.message}
+            />
+          )}
+        />
+
         <Spacer height={4} />
-        <ButtonPrimary text="LOGIN" onPress={navigateToHome} />
+
+        <ButtonPrimary
+          text="LOGIN"
+          onPress={handleLogin}
+          loading={isLoginPending}
+        />
+
         <Text style={tw`text-center tracking-widest text-neutral-500/50`}>
           OR
         </Text>
+
         <ButtonSocialMedia
           logo={{
             uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJg75LWB1zIJt1VTZO7O68yKciaDSkk3KMdw&s',

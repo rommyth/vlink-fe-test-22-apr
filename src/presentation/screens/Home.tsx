@@ -15,7 +15,7 @@ import { Spacer } from '../components/atoms';
 import { CardBoardItem, CardUserItem } from '../components/organisms';
 
 const Home = () => {
-  const { navigateToDetailUser } = useHome();
+  const { account, navigateToDetailUser } = useHome();
 
   const _renderNavbar = () => {
     return (
@@ -34,7 +34,7 @@ const Home = () => {
         <CardBoardItem
           Icon={EnvelopeIcon}
           title="YOUR EMAIL"
-          body="rommy.taufik@gmail.com"
+          body={account?.email}
         />
       </View>
     );

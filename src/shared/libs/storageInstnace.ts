@@ -6,6 +6,7 @@ export const storage = createMMKV({
   encryptionType: 'AES-128',
 });
 
-export const STORAGE_TYPE = {
+export const STORAGE_KEY = {
   TOKEN: 'token',
+  ACCOUNT: 'account',
 };

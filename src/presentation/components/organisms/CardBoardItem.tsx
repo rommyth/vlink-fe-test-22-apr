@@ -13,8 +13,8 @@ import tw from '../../../shared/libs/tailwindInstance';
 
 type CardBoardItemProps = {
   Icon: React.ComponentType<any>;
-  title: string;
-  body: string;
+  title?: string;
+  body?: string;
 };
 
 const CardBoardItem = ({ Icon, title, body }: CardBoardItemProps) => {

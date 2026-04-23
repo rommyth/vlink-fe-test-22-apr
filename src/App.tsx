@@ -4,15 +4,22 @@ import tw from './shared/libs/tailwindInstance';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigation from './presentation/navigations/AppNavigation';
 import './shared/libs/googleSigninInstnace';
+import Toast from 'react-native-toast-message';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const App = () => {
   // enable prefix
   useDeviceContext(tw);
 
   return (
-    <NavigationContainer>
-      <AppNavigation />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <AppNavigation />
+        <Toast />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 

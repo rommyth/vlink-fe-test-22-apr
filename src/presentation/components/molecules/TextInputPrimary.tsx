@@ -9,6 +9,7 @@ type TextInputPrimaryProps = {
   onChangeText?: (text: string) => void;
   secureEntry?: boolean;
   label?: string;
+  errorMessage?: string;
 };
 
 const TextInputPrimary = ({
@@ -17,6 +18,7 @@ const TextInputPrimary = ({
   value,
   onChangeText,
   secureEntry,
+  errorMessage,
 }: TextInputPrimaryProps) => {
   const [isSecureEntry, setIsSecureEntry] = useState(secureEntry || false);
   const [isFocus, setIsFocus] = useState(false);
@@ -61,6 +63,12 @@ const TextInputPrimary = ({
           </TouchableOpacity>
         )}
       </View>
+
+      {!!errorMessage && (
+        <Text style={tw`font-regular text-sm text-red-500 dark:text-red-400`}>
+          {errorMessage}
+        </Text>
+      )}
     </View>
   );
 };

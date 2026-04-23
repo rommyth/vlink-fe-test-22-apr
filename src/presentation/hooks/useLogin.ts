@@ -1,42 +1,99 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { LoginScreenProps } from '../navigations/AppNavigationTypes';
+import Toast from 'react-native-toast-message';
 import {
   GoogleSignin,
   isErrorWithCode,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { loginUsecase } from '../../domain/usecase/loginUsecase';
+import { LoginSchema } from '../../domain/schema/LoginSchema';
+import { useMMKVObject, useMMKVString } from 'react-native-mmkv';
+import { STORAGE_KEY } from '../../shared/libs/storageInstnace';
+import { Account } from '../../domain/models/Account';
+
+const tempEmail = 'rommyth@mail.com';
+const tempPassword = 'testing123';
 
 export default function useLogin() {
   const { navigate } = useNavigation<LoginScreenProps['navigation']>();
+  const [token, setToken] = useMMKVString(STORAGE_KEY.TOKEN);
+  const [account, setAccount] = useMMKVObject<Account>(STORAGE_KEY.ACCOUNT);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: 'rommyth@mail.com',
+      password: 'testing123',
+    },
+  });
+
+  // Login Mutation
+  const { mutate: _loginMutate, isPending: isLoginPending } = useMutation({
+    mutationFn: loginUsecase,
+    onSuccess: res => {
+      setToken(res.token);
+      setAccount({
+        email: res.email,
+      });
+      navigate('Home');
+    },
+    throwOnError: err => {
+      console.log(err);
+      return true;
+    },
+  });
+
+  // Submi Login Email
+  const handleLogin = handleSubmit(data => {
+    if (data.email != tempEmail || data.password != tempPassword) {
+      Toast.show({ type: 'error', text1: 'Invalid email or password' });
+      return;
+    }
+
+    const payload: LoginSchema = {
+      email: data.email,
+      password: data.password,
+    };
+
+    _loginMutate(payload);
+  });
 
   // Sigin Google
   const handleSignInGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
-      console.log(response);
-      alert(JSON.stringify(response, 0, 2));
+
+      const payload: LoginSchema = {
+        email: response.data?.user.email!,
+        password: '',
+        idToken: response.data?.idToken!,
+      };
+
+      _loginMutate(payload);
     } catch (error: any) {
-      console.log(error);
-      alert(JSON.stringify(error, 0, 2));
       if (isErrorWithCode(error)) {
         switch (error.code) {
           case statusCodes.IN_PROGRESS:
-            // operation (eg. sign in) already in progress
-            console.log('IN_PROGRESS');
+            Toast.show({ type: 'error', text1: error.message });
             break;
           case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            // Android only, play services not available or outdated
-            console.log('PLAY_SERVICES_NOT_AVAILABLE');
+            Toast.show({ type: 'error', text1: error.message });
             break;
           default:
-          // some other error happened
+            // some other error happened
+            Toast.show({ type: 'error', text1: error.message });
         }
       } else {
-        // an error that's not related to google sign in occurred
-        console.log('Error Something wen wrong');
+        Toast.show({ type: 'error', text1: error.message });
       }
     }
   };
@@ -45,5 +102,12 @@ export default function useLogin() {
     navigate('Home');
   };
 
-  return { navigateToHome, handleSignInGoogle };
+  return {
+    control,
+    errors,
+    isLoginPending,
+    handleSignInGoogle,
+    handleLogin,
+    navigateToHome,
+  };
 }

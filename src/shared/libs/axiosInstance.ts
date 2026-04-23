@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { storage, STORAGE_TYPE } from './storageInstnace';
+import { storage, STORAGE_KEY } from './storageInstnace';
 
-const httpClient = axios.create({
+export const httpClient = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
   headers: {
     'Content-Type': 'application/json',
@@ -11,7 +11,7 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(config => {
   // read token if exist
-  const token = storage.getString(STORAGE_TYPE.TOKEN);
+  const token = storage.getString(STORAGE_KEY.TOKEN);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

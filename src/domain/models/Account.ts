@@ -1,7 +1,4 @@
 export interface Account {
-  id: string;
+  token?: string;
   email: string;
-  photo?: string;
-  name?: string;
-  loggedBy: 'google | email';
 }
