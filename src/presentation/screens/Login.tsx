@@ -13,7 +13,7 @@ import ButtonSocialMedia from '../components/molecules/ButtonSocialMedia';
 import useLogin from '../hooks/useLogin';
 
 const Login = () => {
-  const { navigateToHome } = useLogin();
+  const { handleSignInGoogle, navigateToHome } = useLogin();
 
   const _renderLogo = () => {
     return (
@@ -42,7 +42,10 @@ const Login = () => {
   const _renderForm = () => {
     return (
       <View style={tw`mt-16 gap-y-6`}>
-        <TextInputPrimary label="Email Address" />
+        <TextInputPrimary
+          label="Email Address"
+          onChangeText={text => console.log(text)}
+        />
         <TextInputPrimary label="Password" secureEntry={true} />
         <Spacer height={4} />
         <ButtonPrimary text="LOGIN" onPress={navigateToHome} />
@@ -54,7 +57,7 @@ const Login = () => {
             uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJg75LWB1zIJt1VTZO7O68yKciaDSkk3KMdw&s',
           }}
           text="Sign in with Google"
-          onPress={() => {}}
+          onPress={handleSignInGoogle}
         />
       </View>
     );
