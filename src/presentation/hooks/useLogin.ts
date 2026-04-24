@@ -1,5 +1,3 @@
-import { View, Text } from 'react-native';
-import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { LoginScreenProps } from '../navigations/AppNavigationTypes';
 import Toast from 'react-native-toast-message';
@@ -20,7 +18,7 @@ const tempEmail = 'rommyth@mail.com';
 const tempPassword = 'testing123';
 
 export default function useLogin() {
-  const { navigate } = useNavigation<LoginScreenProps['navigation']>();
+  const navigation = useNavigation<LoginScreenProps['navigation']>();
   const [token, setToken] = useMMKVString(STORAGE_KEY.TOKEN);
   const [account, setAccount] = useMMKVObject<Account>(STORAGE_KEY.ACCOUNT);
 
@@ -44,7 +42,7 @@ export default function useLogin() {
       setAccount({
         email: res.email,
       });
-      navigate('Home');
+      navigateToHome();
     },
     throwOnError: err => {
       console.log(err);
@@ -100,7 +98,7 @@ export default function useLogin() {
   };
 
   const navigateToHome = () => {
-    navigate('Home');
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   return {

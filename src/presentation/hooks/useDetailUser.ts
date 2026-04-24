@@ -1,13 +1,11 @@
 import { useRoute } from '@react-navigation/native';
 import { DetailUserScreenProps } from '../navigations/AppNavigationTypes';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { getAlbumByUserId } from '../../data/repository/albumRepository';
 import Toast from 'react-native-toast-message';
-import { Ref, useRef, useState } from 'react';
-import { getPhotosByAlbumId } from '../../data/repository/photoRepository';
+import { useRef, useState } from 'react';
 import { getAlbumByUserIdUsecase } from '../../domain/usecase/getAlbumsByUserIdUsecase';
 import { getPhotosByAlbumIdUsecase } from '../../domain/usecase/getPhotosByAlbumIdUsecase';
-import { FlatList, FlatListProps } from 'react-native';
+import { FlatList } from 'react-native';
 import { Photo } from '../../domain/models/Photo';
 
 export default function useDetailUser() {
