@@ -86,6 +86,7 @@ const Login = () => {
               value={value}
               onChangeText={onChange}
               errorMessage={errors.password?.message}
+              secureEntry
             />
           )}
         />

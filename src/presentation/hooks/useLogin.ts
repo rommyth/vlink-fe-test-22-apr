@@ -29,8 +29,8 @@ export default function useLogin() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: 'rommyth@mail.com',
-      password: 'testing123',
+      email: '',
+      password: '',
     },
   });
 
