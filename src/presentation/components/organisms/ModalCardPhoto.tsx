@@ -17,8 +17,13 @@ const ModalCardPhoto = ({ data, visible, onClose }: ModalCardPhotoProps) => {
       onRequestClose={onClose}
       animationType="fade"
     >
-      <View style={tw`flex-1 items-center justify-center bg-black/40`}>
-        <View style={tw`w-[90%] lg:max-w-sm bg-neutral-800 p-4 rounded-md`}>
+      <View
+        style={tw`flex-1 items-center justify-center bg-black/40`}
+        onTouchEnd={onClose}
+      >
+        <View
+          style={tw`w-[90%] lg:max-w-sm bg-white dark:bg-neutral-800 p-4 rounded-md`}
+        >
           <Image
             source={{ uri: data?.url }}
             resizeMethod="auto"
